@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url'=> ['admin/categ
 $this->params['breadcrumbs'][] = ['label' => 'Category images', 'url' => ['admin/image/index', 'slug' => $model->category]];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-//TODO: Поправить хлебные крошки
+
 ?>
 <div class="image-view">
 

@@ -7,6 +7,9 @@ use app\modules\photogallery\models\admin\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+use yii\web\HttpException;
+
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -30,6 +33,15 @@ class CategoryController extends Controller {
                     ],
                 ]
         );
+    }
+
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $username = Yii::$app->user->isGuest ? "guest" : Yii::$app->user->identity->username;
+        if ($username !== "admin") {
+            throw new HttpException(403, 'Oops. You not admin');
+        }
     }
 
     /**

@@ -10,7 +10,6 @@ use yii\grid\GridView;
 $this->title = 'Category images';
 $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url'=> ['admin/category/index']];
 $this->params['breadcrumbs'][] = $this->title;
-//TODO: доделать breadcrumbs
 ?>
 <div class="image-index">
 

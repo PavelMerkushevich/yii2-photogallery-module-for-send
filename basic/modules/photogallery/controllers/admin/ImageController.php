@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 use app\modules\photogallery\models\admin\ImageCreateForm;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
+use Yii;
+use yii\web\HttpException;
 
 /**
  * ImageController implements the CRUD actions for Image model.
@@ -35,15 +37,20 @@ class ImageController extends Controller {
         );
     }
 
-    //TODO: сделать __construct для проверки админ или нет
-    //TODO: Посмотри про обработчиков ошибок(Error handler) Перехват ошибка 400 и превращение 404
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $username = Yii::$app->user->isGuest ? "guest" : Yii::$app->user->identity->username;
+        if ($username !== "admin") {
+            throw new HttpException(403, 'Oops. You not admin');
+        }
+    }
 
     /**
      * Lists all Image models.
      * @return mixed
      */
     public function actionIndex($slug) {
-        //TODO: сделать проверку на существование category
         $searchModel = new ImageSearch();
         $dataProvider = $searchModel->search($this->request->queryParams, $slug);
 

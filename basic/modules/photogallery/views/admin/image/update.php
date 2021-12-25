@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url'=> ['admin/categ
 $this->params['breadcrumbs'][] = ['label' => 'Category images', 'url' => ['admin/image/index', 'slug' => $model->category]];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
-//TODO: Сделать нормальные хлебные крошки
+
 ?>
 <div class="image-update">
 
