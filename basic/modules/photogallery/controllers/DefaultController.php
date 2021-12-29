@@ -12,7 +12,8 @@ use yii\web\HttpException;
 /**
  * Default controller for the `photogallery` module
  */
-class DefaultController extends Controller {
+class DefaultController extends Controller
+{
 
     public $layout = 'default';
 
@@ -20,7 +21,8 @@ class DefaultController extends Controller {
      * Renders the index view for the module
      * @return string
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
 
         $username = Yii::$app->user->isGuest ? "guest" : Yii::$app->user->identity->username;
 
@@ -36,18 +38,18 @@ class DefaultController extends Controller {
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 12]);
         $categories = $query->offset($pages->offset)
-                ->limit($pages->limit)
-                ->all();
+            ->limit($pages->limit)
+            ->all();
 
         if (Yii::$app->request->isAjax) {
-            $pageNumber = (int) Yii::$app->request->post("pageNumber");
-            $categoriesLimit = (int) $pages->limit;
+            $pageNumber = (int)Yii::$app->request->post("pageNumber");
+            $categoriesLimit = (int)$pages->limit;
             $allCategories = (new \yii\db\Query())
-                    ->select(['slug', 'count', 'title', 'id'])
-                    ->from('category')
-                    ->where($queryStatus)
-                    ->orderBy(['id' => SORT_DESC])
-                    ->all();
+                ->select(['slug', 'count', 'title', 'id'])
+                ->from('category')
+                ->where($queryStatus)
+                ->orderBy(['id' => SORT_DESC])
+                ->all();
             $categoriesCount = $countQuery->count();
             $maxPage = ceil($categoriesCount / $categoriesLimit);
             $categoriesStart = $categoriesLimit * $pageNumber;
@@ -68,11 +70,11 @@ class DefaultController extends Controller {
                             $queryStatusForImagePath = "status='guest' AND category='$CategorySlug'";
                         }
                         $imagePath = (new \yii\db\Query())
-                                ->select(['image', 'title', 'id'])
-                                ->from('image')
-                                ->where($queryStatusForImagePath)
-                                ->orderBy(['id' => SORT_DESC])
-                                ->one();
+                            ->select(['image', 'title', 'id'])
+                            ->from('image')
+                            ->where($queryStatusForImagePath)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->one();
                         if ($imagePath) {
                             $NextCategories[$lastIndex]['imagePath'] = $imagePath['image'];
                         }
@@ -94,11 +96,11 @@ class DefaultController extends Controller {
                             $queryStatusForImagePath = "status='guest' AND category='$CategorySlug'";
                         }
                         $imagePath = (new \yii\db\Query())
-                                ->select(['image', 'title', 'id'])
-                                ->from('image')
-                                ->where($queryStatusForImagePath)
-                                ->orderBy(['id' => SORT_DESC])
-                                ->one();
+                            ->select(['image', 'title', 'id'])
+                            ->from('image')
+                            ->where($queryStatusForImagePath)
+                            ->orderBy(['id' => SORT_DESC])
+                            ->one();
                         if ($imagePath) {
                             $NextCategories[$lastIndex]['imagePath'] = $imagePath['image'];
                         }
@@ -115,7 +117,8 @@ class DefaultController extends Controller {
         return $this->render('index', compact('pages', 'categories'));
     }
 
-    public function actionCategoryImages($slug) {
+    public function actionCategoryImages($slug)
+    {
 
         $category = Category::findOne(['slug' => $slug]);
         if (!$category) {
@@ -155,18 +158,18 @@ class DefaultController extends Controller {
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 12]);
         $images = $query->offset($pages->offset)
-                ->limit($pages->limit)
-                ->all();
+            ->limit($pages->limit)
+            ->all();
 
         if (Yii::$app->request->isAjax) {
-            $pageNumber = (int) Yii::$app->request->post("pageNumber");
-            $imagesLimit = (int) $pages->limit;
+            $pageNumber = (int)Yii::$app->request->post("pageNumber");
+            $imagesLimit = (int)$pages->limit;
             $allImages = (new \yii\db\Query())
-                    ->select(['image', 'title', 'id'])
-                    ->from('image')
-                    ->where($queryStatus)
-                    ->orderBy(['id' => SORT_DESC])
-                    ->all();
+                ->select(['image', 'title', 'id'])
+                ->from('image')
+                ->where($queryStatus)
+                ->orderBy(['id' => SORT_DESC])
+                ->all();
             $imagesCount = $countQuery->count();
             $maxPage = ceil($imagesCount / $imagesLimit);
             $imagesStart = $imagesLimit * $pageNumber;

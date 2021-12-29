@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\assets\AppAsset;
@@ -27,6 +28,7 @@ AppAsset::register($this);
 
 <header>
     <?php
+    $username = Yii::$app->user->isGuest ? "guest" : Yii::$app->user->identity->username;
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -39,11 +41,13 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Photogallery', 'url' => ['/photogallery/default/index']],
-            ['label' => 'Admin panel', 'url' => ['/photogallery/admin/category/index']],
+            $username === "admin" ? (
+            ['label' => 'Admin panel', 'url' => ['/photogallery/admin/category/index']]
+            ) : (''),
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+            ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
