@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="image-form">
 
-        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+        <?php $form = ActiveForm::begin(['id' => 'image', 'options' => ['enctype' => 'multipart/form-data']]) ?>
 
         <?= $form->field($model, 'title', ['inputOptions' => ['id' => 'image-title', 'class' => 'form-control']])->textInput(['maxlength' => true]) ?>
 
