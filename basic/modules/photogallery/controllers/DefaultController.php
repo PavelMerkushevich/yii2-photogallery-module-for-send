@@ -52,65 +52,43 @@ class DefaultController extends Controller
                 ->all();
             $categoriesCount = $countQuery->count();
             $maxPage = ceil($categoriesCount / $categoriesLimit);
-            $categoriesStart = $categoriesLimit * $pageNumber;
-            $nextPage = $pageNumber + 1;
-            $categoriesEnd = $categoriesLimit * $nextPage;
+            if ($pageNumber < $maxPage) {
+                $categoriesStart = $categoriesLimit * $pageNumber;
+                $nextPage = $pageNumber + 1;
+                $categoriesEnd = $categoriesLimit * $nextPage;
+            } else {
+                $categoriesStart = 0;
+                $nextPage = 1;
+                $categoriesEnd = $categoriesLimit;
+            }
 
             $lastIndex = 0;
-            if ($pageNumber < $maxPage) {
-                for ($i = $categoriesStart; $i < $categoriesEnd; $i++) {
-                    if (isset($allCategories[$i])) {
-                        $NextCategories[] = $allCategories[$i];
-                        $CategorySlug = $NextCategories[$lastIndex]['slug'];
-                        if ($username === "demo") {
-                            $queryStatusForImagePath = "status!='link' AND status!='admin' AND category='$CategorySlug'";
-                        } elseif ($username === "admin") {
-                            $queryStatusForImagePath = "category='$CategorySlug'";
-                        } else {
-                            $queryStatusForImagePath = "status='guest' AND category='$CategorySlug'";
-                        }
-                        $imagePath = (new \yii\db\Query())
-                            ->select(['image', 'title', 'id'])
-                            ->from('image')
-                            ->where($queryStatusForImagePath)
-                            ->orderBy(['id' => SORT_DESC])
-                            ->one();
-                        if ($imagePath) {
-                            $NextCategories[$lastIndex]['imagePath'] = $imagePath['image'];
-                        }
+            for ($i = $categoriesStart; $i < $categoriesEnd; $i++) {
+                if (isset($allCategories[$i])) {
+                    $NextCategories[] = $allCategories[$i];
+                    $CategorySlug = $NextCategories[$lastIndex]['slug'];
+                    if ($username === "demo") {
+                        $queryStatusForImagePath = "status!='link' AND status!='admin' AND category='$CategorySlug'";
+                    } elseif ($username === "admin") {
+                        $queryStatusForImagePath = "category='$CategorySlug'";
                     } else {
-                        break;
+                        $queryStatusForImagePath = "status='guest' AND category='$CategorySlug'";
                     }
-                    $lastIndex++;
-                }
-            } else {
-                for ($i = 0; $i < $categoriesLimit; $i++) {
-                    if (isset($allCategories[$i])) {
-                        $NextCategories[] = $allCategories[$i];
-                        $CategorySlug = $NextCategories[$lastIndex]['slug'];
-                        if ($username === "demo") {
-                            $queryStatusForImagePath = "status!='link' AND status!='admin' AND category='$CategorySlug'";
-                        } elseif ($username === "admin") {
-                            $queryStatusForImagePath = "category='$CategorySlug'";
-                        } else {
-                            $queryStatusForImagePath = "status='guest' AND category='$CategorySlug'";
-                        }
-                        $imagePath = (new \yii\db\Query())
-                            ->select(['image', 'title', 'id'])
-                            ->from('image')
-                            ->where($queryStatusForImagePath)
-                            ->orderBy(['id' => SORT_DESC])
-                            ->one();
-                        if ($imagePath) {
-                            $NextCategories[$lastIndex]['imagePath'] = $imagePath['image'];
-                        }
-                    } else {
-                        break;
+                    $imagePath = (new \yii\db\Query())
+                        ->select(['image', 'id'])
+                        ->from('image')
+                        ->where($queryStatusForImagePath)
+                        ->orderBy(['id' => SORT_DESC])
+                        ->one();
+                    if ($imagePath) {
+                        $NextCategories[$lastIndex]['imagePath'] = Yii::getAlias($imagePath['image']);
                     }
-                    $lastIndex++;
+                } else {
+                    break;
                 }
-                $nextPage = 1;
+                $lastIndex++;
             }
+
             return json_encode(["NextCategories" => $NextCategories, "nextPage" => $nextPage]);
         }
 
@@ -172,27 +150,25 @@ class DefaultController extends Controller
                 ->all();
             $imagesCount = $countQuery->count();
             $maxPage = ceil($imagesCount / $imagesLimit);
-            $imagesStart = $imagesLimit * $pageNumber;
-            $nextPage = $pageNumber + 1;
-            $imagesEnd = $imagesLimit * $nextPage;
+
             if ($pageNumber < $maxPage) {
-                for ($i = $imagesStart; $i < $imagesEnd; $i++) {
-                    if (isset($allImages[$i])) {
-                        $NextImages[] = $allImages[$i];
-                    } else {
-                        break;
-                    }
-                }
+                $imagesStart = $imagesLimit * $pageNumber;
+                $nextPage = $pageNumber + 1;
+                $imagesEnd = $imagesLimit * $nextPage;
             } else {
-                for ($i = 0; $i < $imagesLimit; $i++) {
-                    if (isset($allImages[$i])) {
-                        $NextImages[] = $allImages[$i];
-                    } else {
-                        break;
-                    }
-                }
+                $imagesStart = 0;
                 $nextPage = 1;
+                $imagesEnd = $imagesLimit;
             }
+
+            for ($i = $imagesStart; $i < $imagesEnd; $i++) {
+                if (isset($allImages[$i])) {
+                    $NextImages[] = $allImages[$i];
+                } else {
+                    break;
+                }
+            }
+
             return json_encode(["NextImages" => $NextImages, "nextPage" => $nextPage]);
         }
         return $this->render('categoryImages', compact('pages', 'images', 'category'));

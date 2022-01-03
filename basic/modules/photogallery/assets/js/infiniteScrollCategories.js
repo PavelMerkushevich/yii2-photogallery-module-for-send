@@ -1,11 +1,14 @@
 var loadCategory = false;
 
-$(window).scroll(function () {
-    if ($(window).height() + $(window).scrollTop() >= $(".category-grid").height() - 200 && !loadCategory) {
-        loadCategory = true;
-        infiniteScroll();
-    }
+window.addEventListener('load', function () {
+    $(window).scroll(function () {
+        if ($(window).height() + $(window).scrollTop() >= $(".category-grid").height() - 200 && !loadCategory) {
+            loadCategory = true;
+            infiniteScroll();
+        }
+    });
 });
+
 
 function infiniteScroll() {
 
@@ -45,10 +48,9 @@ function infiniteScroll() {
 }
 
 function viewNextCategories(data) {
-    console.log(data);
     data.forEach(function (category) {
         if (typeof category['imagePath'] !== 'undefined') {
-            let imagePath = siteUrl+"/" + category['imagePath'];
+            let imagePath = siteUrl+category['imagePath'];
             categoryElement = '<a class="gallery-item" href="'+siteUrl+'/web/page/category/' + category['slug'] + '", style="text-decoration: none;"><div class="category-info-container">  <div class="small-image" style="background: url(\'' + imagePath + '\'); background-size: cover;">   <div style="display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,.60); width:100%; height: 25%;">   <span style="color: whitesmoke;"><span class="category-title">' + category['title'] + '</span> <span class="badge bg-secondary category-count" style="opacity: 0.8; border-radius: 6px;">' + category['count'] + '</span></span></div></div></div></a>';
 
             $(".category-grid").append(categoryElement);

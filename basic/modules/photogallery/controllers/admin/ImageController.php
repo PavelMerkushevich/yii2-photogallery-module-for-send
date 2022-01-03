@@ -124,9 +124,9 @@ class ImageController extends Controller {
      */
     public function actionDelete($id) {
         $image = $this->findModel($id);
-        unlink(Url::to("@app/".$image->image));
+        unlink(Url::to("@app".Yii::getAlias($image->image)));
         $image->delete();
-        
+
         $imageCategory = \app\modules\photogallery\models\Category::findOne(['slug' => $image->category]);
         $imageCategory->count = $imageCategory->count - 1;
         $imageCategory->save();

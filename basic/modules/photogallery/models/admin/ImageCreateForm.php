@@ -62,14 +62,14 @@ class ImageCreateForm extends Model {
             $image->extension = $this->imageFile->extension;
             if ($image->save()) {
                 $this->processingImage($image);
-                $image->image = 'web/images/photogallery/' . $image->id . '.' . $image->extension;
+                $image->image = '@web/images/photogallery/' . $image->id . '.' . $image->extension;
+                $imageCategory = Category::findOne(["slug" => $image->category]);
                 if ($image->save()) {
-                    $imageCategory = Category::findOne(["slug" => $image->category]);
                     $imageCategory->count = $imageCategory->count + 1;
                     $imageCategory->save();
                 } else {
                     $image->delete();
-                    unlink(Url::to($image->image));
+                    unlink(Url::to("@app".Yii::getAlias($image->image)));
                     $imageCategory->count = $imageCategory->count - 1;
                     $imageCategory->save();
                 }
