@@ -1,8 +1,7 @@
 var loadCategory = false;
 
-
-$(window).scroll(function () {
-    window.addEventListener('load', function () {
+window.addEventListener('load', function () {
+    $(window).scroll(function () {
         if ($(window).height() + $(window).scrollTop() >= $(".category-grid").height() - 200 && !loadCategory) {
             loadCategory = true;
             infiniteScroll();
@@ -27,12 +26,9 @@ function infiniteScroll() {
         pageNumber = 1;
     }
     $.ajax({
-        url: "",
-        data: {
+        url: "", data: {
             pageNumber: pageNumber
-        },
-        type: 'POST',
-        success: function (data) {
+        }, type: 'POST', success: function (data) {
             data = JSON.parse(data);
             viewNextCategories(data['NextCategories']);
             history.pushState(null, null, '/web/' + data['nextPage'] + '?per-page=' + categoriesLimit);
@@ -41,8 +37,7 @@ function infiniteScroll() {
                 loadCategory = true;
                 infiniteScroll();
             }
-        },
-        error: function () {
+        }, error: function () {
             alert("error");
         }
     });
