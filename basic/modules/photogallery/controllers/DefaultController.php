@@ -68,11 +68,11 @@ class DefaultController extends Controller
                     $NextCategories[] = $allCategories[$i];
                     $CategorySlug = $NextCategories[$lastIndex]['slug'];
                     if ($username === "demo") {
-                        $queryStatusForImagePath = "status!='link' AND status!='admin' AND category='$CategorySlug'";
+                        $queryStatusForImagePath = "status!='link' AND status!='admin' AND category='$CategorySlug' AND image!=''";
                     } elseif ($username === "admin") {
-                        $queryStatusForImagePath = "category='$CategorySlug'";
+                        $queryStatusForImagePath = "category='$CategorySlug' AND image!=''";
                     } else {
-                        $queryStatusForImagePath = "status='guest' AND category='$CategorySlug'";
+                        $queryStatusForImagePath = "status='guest' AND category='$CategorySlug' AND image!=''";
                     }
                     $imagePath = (new \yii\db\Query())
                         ->select(['image', 'id'])

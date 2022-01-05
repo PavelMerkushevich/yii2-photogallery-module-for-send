@@ -12,6 +12,7 @@ window.addEventListener('load', function () {
         }
     });
 });
+
 function infiniteScroll() {
 
     CategoryUrl = window.location.href;
@@ -49,7 +50,11 @@ function infiniteScroll() {
 
 function viewNextImages(data) {
     data.forEach(function (image) {
-        imageElement = '<a class="image-container" href="' + siteUrl + '/' + image['image'].substr(1) + '" data-caption="' + image['title'] + '"><img class="image-grid-element" src="http://yii2-photogallery-module/' + image['image'].substr(1) + '"/></a>';
+        if (image['image']) {
+            imageElement = '<a class="image-container" href="' + siteUrl + '/' + image['image'].substr(1) + '" data-caption="' + image['title'] + '"><img class="image-grid-element" src="http://yii2-photogallery-module/' + image['image'].substr(1) + '"/></a>';
+        } else {
+            imageElement = '';
+        }
         $(".image-grid").append(imageElement);
         setTimeout(function () {
             $(".image-grid").masonry('appended', imageElement).masonry();

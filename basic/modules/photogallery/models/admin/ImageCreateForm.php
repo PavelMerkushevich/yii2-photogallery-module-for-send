@@ -66,8 +66,11 @@ class ImageCreateForm extends Model {
                 $imageCategory = Category::findOne(["slug" => $image->category]);
                 if ($image->save()) {
                     $imageCategory->count = $imageCategory->count + 1;
-                    $imageCategory->save();
+                    if($imageCategory->save()){
+                        Yii::$app->session->setFlash("success", "Image successfully saved!");
+                    }
                 } else {
+                    Yii::$app->session->setFlash("error", "Image wasn't saved!");
                     $image->delete();
                     unlink(Url::to("@app".Yii::getAlias($image->image)));
                     $imageCategory->count = $imageCategory->count - 1;

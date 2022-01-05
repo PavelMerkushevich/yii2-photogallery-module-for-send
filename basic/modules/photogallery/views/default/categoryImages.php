@@ -22,21 +22,24 @@ $this->title = $category->title;
         'pagination' => $pages,
     ]);
     ?>
-    <div class="load-animation-container"> 
+    <div class="load-animation-container">
         <img class="load-animation" src="<?= Url::to('web/animations/Balls.gif', 'http') ?>" alt="animation"/>
     </div>
 
     <div class="image-grid">
         <?php if (isset($images)): ?>
             <?php foreach ($images as $image): ?>
-                <a class="image-container" href="<?= Url::to($image['image'], 'http') ?>" data-caption="<?= $image->title ?>">
-                    <img class="image-grid-element" src="<?= Url::to($image['image'], 'http') ?>"/>    
-                </a>
+                <?php if (isset($image['image'])): ?>
+                    <a class="image-container" href="<?= Url::to($image['image'], 'http') ?>"
+                       data-caption="<?= $image->title ?>">
+                        <img class="image-grid-element" src="<?= Url::to($image['image'], 'http') ?>"/>
+                    </a>
+                <?php endif; ?>
             <?php endforeach; ?>
         <?php endif; ?>
 
     </div>
-<!--    <div style="display: flex; justify-content: center;">
+    <!--    <div style="display: flex; justify-content: center;">
         <?= Html::button('Next', ['onclick' => "infiniteScroll('$category->slug')", 'style' => 'margin-top: 30px;']) ?>
     </div>-->
 </div>

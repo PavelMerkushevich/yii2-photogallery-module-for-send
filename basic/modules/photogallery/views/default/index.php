@@ -28,11 +28,11 @@ $this->title = 'Images categories';
             <?php
             $username = Yii::$app->user->isGuest ? "guest" : Yii::$app->user->identity->username;
             if ($username === "demo") {
-                $queryStatus = "status!='link' AND status!='admin' AND category='$category->slug'";
+                $queryStatus = "status!='link' AND status!='admin' AND category='$category->slug' AND image!=''";
             } elseif ($username === "admin") {
-                $queryStatus = "category='$category->slug'";
+                $queryStatus = "category='$category->slug' AND image!=''";
             } else {
-                $queryStatus = "status='guest' AND category='$category->slug'";
+                $queryStatus = "status='guest' AND category='$category->slug' AND image!=''";
             }
             $image = (new \yii\db\Query())
                     ->select(['image', 'title', 'id'])
