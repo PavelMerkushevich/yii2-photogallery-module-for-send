@@ -123,6 +123,7 @@ class CategoryController extends Controller {
     public function actionDelete($id) {
         $this->findModel($id)->delete();
 
+        //TODO: Сделай так, чтобы удалялись фотки данной категории
         return $this->redirect(['index']);
     }
 

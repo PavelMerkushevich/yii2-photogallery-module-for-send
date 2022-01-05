@@ -137,8 +137,11 @@ class ImageController extends Controller
         $image->delete();
 
         $imageCategory = \app\modules\photogallery\models\Category::findOne(['slug' => $image->category]);
-        $imageCategory->count = $imageCategory->count - 1;
+        $imagesCount = Yii::$app->db->createCommand('SELECT COUNT(*) FROM image')->queryOne();
+        $imageCategory->count = $imagesCount['COUNT(*)'];
+
         $imageCategory->save();
+
 
         return $this->redirect(Url::toRoute(['admin/image/index', 'slug' => $image->category]));
     }
