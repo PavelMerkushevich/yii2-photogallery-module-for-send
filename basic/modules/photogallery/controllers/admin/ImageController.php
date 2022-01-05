@@ -16,24 +16,26 @@ use yii\web\HttpException;
 /**
  * ImageController implements the CRUD actions for Image model.
  */
-class ImageController extends Controller {
+class ImageController extends Controller
+{
 
     public $layout = 'admin';
 
     /**
      * @inheritDoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return array_merge(
-                parent::behaviors(),
-                [
-                    'verbs' => [
-                        'class' => VerbFilter::className(),
-                        'actions' => [
-                            'delete' => ['POST'],
-                        ],
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
                     ],
-                ]
+                ],
+            ]
         );
     }
 
@@ -50,13 +52,14 @@ class ImageController extends Controller {
      * Lists all Image models.
      * @return mixed
      */
-    public function actionIndex($slug) {
+    public function actionIndex($slug)
+    {
         $searchModel = new ImageSearch();
         $dataProvider = $searchModel->search($this->request->queryParams, $slug);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -66,9 +69,10 @@ class ImageController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -77,7 +81,8 @@ class ImageController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new ImageCreateForm();
 
         if ($this->request->isPost) {
@@ -92,7 +97,7 @@ class ImageController extends Controller {
           } */
 
         return $this->render('create', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -103,7 +108,8 @@ class ImageController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -111,7 +117,7 @@ class ImageController extends Controller {
         }
 
         return $this->render('update', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -122,9 +128,12 @@ class ImageController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $image = $this->findModel($id);
-        unlink(Url::to("@app".Yii::getAlias($image->image)));
+        if (isset($image['image'])) {
+            unlink(Url::to("@app" . Yii::getAlias($image->image)));
+        }
         $image->delete();
 
         $imageCategory = \app\modules\photogallery\models\Category::findOne(['slug' => $image->category]);
@@ -141,7 +150,8 @@ class ImageController extends Controller {
      * @return Image the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Image::findOne($id)) !== null) {
             return $model;
         }
