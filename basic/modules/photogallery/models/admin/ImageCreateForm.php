@@ -67,7 +67,7 @@ class ImageCreateForm extends Model {
                 if ($image->save()) {
                     $imageCategory->count = $imageCategory->count + 1;
                     //  $imagesCount = Yii::$app->db->createCommand('SELECT COUNT(*) FROM image')->queryOne();
-                    //  $imageCategory->count = $imagesCount['COUNT(*)']; <------------ Проанализировать надо ли так усложнять
+                    //  $imageCategory->count = $imagesCount['COUNT(*)']; <------------ Проанализировать, надо ли так усложнять
                     if($imageCategory->save()){
                         Yii::$app->session->setFlash("success", "Image successfully saved!");
                     }
