@@ -130,11 +130,10 @@ class CategoryController extends Controller
     public function actionDelete($id)
     {
         $category = $this->findModel($id);
-        if($category->delete()){
+        if ($category->delete()) {
             Image::deleteCategoryImage($category->slug);
         }
 
-        //TODO: Сделай так, чтобы удалялись фотки данной категории
         return $this->redirect(['index']);
     }
 
