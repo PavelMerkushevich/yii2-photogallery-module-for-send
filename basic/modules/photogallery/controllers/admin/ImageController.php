@@ -96,6 +96,10 @@ class ImageController extends Controller
           $model->loadDefaultValues();
           } */
 
+        $categoriesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM category")->queryOne();
+        if($categoriesCount['COUNT(*)'] == 0){
+            Yii::$app->session->setFlash("warning", "To upload an image, you must create at least one category!");
+        }
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -131,15 +135,14 @@ class ImageController extends Controller
     public function actionDelete($id)
     {
         $image = $this->findModel($id);
-        if (isset($image['image'])) {
+        if (isset($image->image)) {
             unlink(Url::to("@app" . Yii::getAlias($image->image)));
         }
         $image->delete();
 
         $imageCategory = \app\modules\photogallery\models\Category::findOne(['slug' => $image->category]);
-        $imagesCount = Yii::$app->db->createCommand('SELECT COUNT(*) FROM image')->queryOne();
+        $imagesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM image WHERE category = '$image->category'")->queryOne();
         $imageCategory->count = $imagesCount['COUNT(*)'];
-
         $imageCategory->save();
 
 

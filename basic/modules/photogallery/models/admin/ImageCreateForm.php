@@ -65,17 +65,18 @@ class ImageCreateForm extends Model {
                 $image->image = '@web/images/photogallery/' . $image->id . '.' . $image->extension;
                 $imageCategory = Category::findOne(["slug" => $image->category]);
                 if ($image->save()) {
-                    $imageCategory->count = $imageCategory->count + 1;
-                    //  $imagesCount = Yii::$app->db->createCommand('SELECT COUNT(*) FROM image')->queryOne();
-                    //  $imageCategory->count = $imagesCount['COUNT(*)']; <------------ Проанализировать, надо ли так усложнять
+                    $imagesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM image WHERE category = '$image->category'")->queryOne();
+                    $imageCategory->count = $imagesCount['COUNT(*)'];
                     if($imageCategory->save()){
                         Yii::$app->session->setFlash("success", "Image successfully saved!");
                     }
                 } else {
-                    Yii::$app->session->setFlash("error", "Image wasn't saved!");
+                    Yii::$app->session->setFlash("danger", "Image wasn't saved!");
                     $image->delete();
-                    unlink(Url::to("@app".Yii::getAlias($image->image)));
-                    $imagesCount = Yii::$app->db->createCommand('SELECT COUNT(*) FROM image')->queryOne();
+                    if (isset($image->image)) {
+                        unlink(Url::to("@app" . Yii::getAlias($image->image)));
+                    }
+                    $imagesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM image WHERE category = '$image->category'")->queryOne();
                     $imageCategory->count = $imagesCount['COUNT(*)'];
                     $imageCategory->save();
                 }

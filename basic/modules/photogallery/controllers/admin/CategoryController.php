@@ -4,6 +4,7 @@ namespace app\modules\photogallery\controllers\admin;
 
 use app\modules\photogallery\models\Category;
 use app\modules\photogallery\models\admin\CategorySearch;
+use app\modules\photogallery\models\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,24 +15,26 @@ use yii\web\HttpException;
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
-class CategoryController extends Controller {
+class CategoryController extends Controller
+{
 
     public $layout = 'admin';
 
     /**
      * @inheritDoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return array_merge(
-                parent::behaviors(),
-                [
-                    'verbs' => [
-                        'class' => VerbFilter::className(),
-                        'actions' => [
-                            'delete' => ['POST'],
-                        ],
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
                     ],
-                ]
+                ],
+            ]
         );
     }
 
@@ -48,13 +51,14 @@ class CategoryController extends Controller {
      * Lists all Category models.
      * @return mixed
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -64,9 +68,10 @@ class CategoryController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-                    'model' => $this->findModel($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -75,7 +80,8 @@ class CategoryController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new Category();
 
         if ($this->request->isPost) {
@@ -90,7 +96,7 @@ class CategoryController extends Controller {
         }
 
         return $this->render('create', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -101,7 +107,8 @@ class CategoryController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -109,7 +116,7 @@ class CategoryController extends Controller {
         }
 
         return $this->render('update', [
-                    'model' => $model,
+            'model' => $model,
         ]);
     }
 
@@ -120,8 +127,12 @@ class CategoryController extends Controller {
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id) {
-        $this->findModel($id)->delete();
+    public function actionDelete($id)
+    {
+        $category = $this->findModel($id);
+        if($category->delete()){
+            Image::deleteCategoryImage($category->slug);
+        }
 
         //TODO: Сделай так, чтобы удалялись фотки данной категории
         return $this->redirect(['index']);
@@ -134,7 +145,8 @@ class CategoryController extends Controller {
      * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
         if (($model = Category::findOne($id)) !== null) {
             return $model;
         }

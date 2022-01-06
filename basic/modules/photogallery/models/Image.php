@@ -3,6 +3,7 @@
 namespace app\modules\photogallery\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "image".
@@ -16,19 +17,22 @@ use Yii;
  * @property string $extension
  * @property string $image
  */
-class Image extends \yii\db\ActiveRecord {
+class Image extends \yii\db\ActiveRecord
+{
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'image';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['category', 'title', 'status', 'date'], 'required'],
             [['author', 'category', 'title', 'date', 'extension', 'image'], 'string', 'max' => 50],
@@ -40,7 +44,8 @@ class Image extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'author' => 'Author',
@@ -51,6 +56,18 @@ class Image extends \yii\db\ActiveRecord {
             'extension' => 'Extension',
             'image' => 'Image',
         ];
+    }
+
+    public static function deleteCategoryImage($category)
+    {
+        $categoryImages = Image::findAll(['category' => $category]);
+        foreach ($categoryImages as $categoryImage) {
+            if ($categoryImage->delete()) {
+                if (isset($categoryImage->image)) {
+                    unlink(Url::to("@app" . Yii::getAlias($categoryImage->image)));
+                }
+            }
+        }
     }
 
 }
