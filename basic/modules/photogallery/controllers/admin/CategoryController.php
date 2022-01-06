@@ -131,7 +131,7 @@ class CategoryController extends Controller
     {
         $category = $this->findModel($id);
         if ($category->delete()) {
-            Image::deleteCategoryImage($category->slug);
+            Image::deleteCategoryImages($category->slug);
         }
 
         return $this->redirect(['index']);

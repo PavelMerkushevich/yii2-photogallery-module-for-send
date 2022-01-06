@@ -58,7 +58,7 @@ class Image extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function deleteCategoryImage($category)
+    public static function deleteCategoryImages($category)
     {
         $categoryImages = Image::findAll(['category' => $category]);
         foreach ($categoryImages as $categoryImage) {

@@ -9,7 +9,8 @@ use yii\helpers\Url;
 use app\modules\photogallery\models\Image;
 use app\modules\photogallery\models\Category;
 
-class ImageCreateForm extends Model {
+class ImageCreateForm extends Model
+{
 
     /**
      * {@inheritdoc}
@@ -29,7 +30,8 @@ class ImageCreateForm extends Model {
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['category', 'title', 'status', 'watermark'], 'required'],
             [['author', 'category', 'title', 'date', 'extension', 'image'], 'string', 'max' => 50],
@@ -42,7 +44,8 @@ class ImageCreateForm extends Model {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'title' => 'Title',
@@ -50,7 +53,8 @@ class ImageCreateForm extends Model {
         ];
     }
 
-    public function save() {
+    public function save()
+    {
         if ($this->validate()) {
 
             $image = new Image;
@@ -67,18 +71,19 @@ class ImageCreateForm extends Model {
                 if ($image->save()) {
                     $imagesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM image WHERE category = '$image->category'")->queryOne();
                     $imageCategory->count = $imagesCount['COUNT(*)'];
-                    if($imageCategory->save()){
+                    if ($imageCategory->save()) {
                         Yii::$app->session->setFlash("success", "Image successfully saved!");
                     }
                 } else {
                     Yii::$app->session->setFlash("danger", "Image wasn't saved!");
-                    $image->delete();
-                    if (isset($image->image)) {
-                        unlink(Url::to("@app" . Yii::getAlias($image->image)));
+                    if ($image->delete()) {
+                        if (isset($image->image)) {
+                            unlink(Url::to("@app" . Yii::getAlias($image->image)));
+                        }
+                        $imagesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM image WHERE category = '$image->category'")->queryOne();
+                        $imageCategory->count = $imagesCount['COUNT(*)'];
+                        $imageCategory->save();
                     }
-                    $imagesCount = Yii::$app->db->createCommand("SELECT COUNT(*) FROM image WHERE category = '$image->category'")->queryOne();
-                    $imageCategory->count = $imagesCount['COUNT(*)'];
-                    $imageCategory->save();
                 }
                 $this->id = $image->id;
                 return $image;
@@ -88,7 +93,8 @@ class ImageCreateForm extends Model {
         }
     }
 
-    private function processingImage($image) {
+    private function processingImage($image)
+    {
         if ($this->watermark !== "none") {
             $imgFile = $this->imageFile->tempName;
 
