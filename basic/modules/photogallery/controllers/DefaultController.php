@@ -112,7 +112,7 @@ class DefaultController extends Controller
         } elseif ($category->status === "user" && Yii::$app->user->isGuest) {
             throw new HttpException(403, "Oops. You can't look this page!");
         }
-        if (!isset($_SERVER['HTTP_REFERER'])) {
+        if ($category->status == "link") {
 
             if ($username === "demo") {
                 $queryStatus = "status!='admin' AND category='$slug'";
