@@ -51,7 +51,7 @@ function infiniteScroll() {
 function viewNextImages(data) {
     data.forEach(function (image) {
         if (image['image']) {
-            imageElement = '<a class="image-container" href="' + siteUrl + '/' + image['image'].substr(1) + '" data-caption="' + image['title'] + '"><img class="image-grid-element" src="http://yii2-photogallery-module/' + image['image'].substr(1) + '"/></a>';
+            imageElement = '<a class="image-container" href="' + siteUrl + '/' + image['image'].substr(1) + '" data-caption="' + image['title'] + '"><img class="image-grid-element" src="' + siteUrl + '/' + image['image'].substr(1) + '"/></a>';
         } else {
             imageElement = '';
         }
