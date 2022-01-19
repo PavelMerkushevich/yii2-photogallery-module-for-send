@@ -1,3 +1,4 @@
+httpReferer = !!document.referrer;
 var loadImage = false;
 //var documentUrl = location.href;
 //var url = documentUrl.replace("web/page/category/"+categorySlug,"");
@@ -30,6 +31,7 @@ function infiniteScroll() {
         url: categorySlug,
         data: {
             pageNumber: pageNumber,
+            httpReferer: httpReferer
         },
         type: 'POST',
         success: function (data) {

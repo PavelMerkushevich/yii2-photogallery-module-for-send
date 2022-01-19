@@ -112,7 +112,7 @@ class DefaultController extends Controller
         } elseif ($category->status === "user" && Yii::$app->user->isGuest) {
             throw new HttpException(403, "Oops. You can't look this page!");
         }
-        if ($category->status == "link") {
+        if (!isset($_SERVER['HTTP_REFERER'])) {
 
             if ($username === "demo") {
                 $queryStatus = "status!='admin' AND category='$slug'";
@@ -141,7 +141,17 @@ class DefaultController extends Controller
 
         if (Yii::$app->request->isAjax) {
             $pageNumber = (int)Yii::$app->request->post("pageNumber");
+            $httpReferer = json_decode(Yii::$app->request->post("httpReferer"));
             $imagesLimit = (int)$pages->limit;
+            if (!$httpReferer) {
+                if (Yii::$app->user->can('admin')) {
+                    $queryStatus = "category='$slug'";
+                } elseif (Yii::$app->user->can('active')) {
+                    $queryStatus = "status!='admin' AND category='$slug'";
+                } else {
+                    $queryStatus = "status!='user' AND status!='admin' AND category='$slug'";
+                }
+            }
             $allImages = (new \yii\db\Query())
                 ->select(['image', 'title', 'id'])
                 ->from('image')
