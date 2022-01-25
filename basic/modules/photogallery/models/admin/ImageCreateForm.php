@@ -98,7 +98,7 @@ class ImageCreateForm extends Model
         if ($this->watermark !== "none") {
             $imgFile = $this->imageFile->tempName;
 
-            $originalStamp = imagecreatefrompng(Url::to("@app/web/images/stamp.png"));
+            $originalStamp = imagecreatefrompng(Url::to("@app/web/stamps/stamp.png"));
             imageSaveAlpha($originalStamp, true);
 
             $imgInfo = getimagesize($imgFile);
