@@ -160,7 +160,7 @@ class ImageCreateForm extends Model
             }
             imagedestroy($img);
             imagedestroy($tmp);
-            imagedestroy($stamp);
+//            imagedestroy($stamp);
         } else {
             $this->imageFile->saveAs('@app/web/images/photogallery/' . $image->id . '.' . $image->extension);
         }
