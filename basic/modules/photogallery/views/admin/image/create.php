@@ -26,9 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'author', ['inputOptions' => ['id' => 'image-author', 'class' => 'form-control']])->textInput(['maxlength' => true]) ?>
 
         <?=
-        $form->field($model, 'category', ['inputOptions' => ['id' => 'image-category', 'class' => 'form-control']])->dropDownList(ArrayHelper::map(Category::find()->all(), 'slug', 'title'), [
-            'prompt' => 'Select category...'
-        ])
+        $form->field($model, 'category', ['inputOptions' => ['id' => 'image-category', 'class' => 'form-control']])->dropDownList(ArrayHelper::map(Category::find()->all(), 'slug', 'title'))
         ?>
 
         <?= $form->field($model, 'status', ['inputOptions' => ['id' => 'image-status', 'class' => 'form-control']])->dropDownList(['guest' => 'guest', 'user' => 'user', 'admin' => 'admin', 'link' => 'link']) ?>

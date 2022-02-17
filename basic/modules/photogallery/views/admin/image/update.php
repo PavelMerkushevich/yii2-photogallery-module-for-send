@@ -27,9 +27,7 @@ $this->params['breadcrumbs'][] = 'Update';
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
         <?=
-        $form->field($model, 'category')->dropDownList(ArrayHelper::map(Category::find()->all(), 'slug', 'title'), [
-            'prompt' => 'Select category...'
-        ])
+        $form->field($model, 'category')->dropDownList(ArrayHelper::map(Category::find()->all(), 'slug', 'title'))
         ?>
 
         <?= $form->field($model, 'status')->dropDownList(['guest' => 'guest', 'user' => 'user', 'admin' => 'admin', 'link' => 'link']) ?>
